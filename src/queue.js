@@ -1,36 +1,61 @@
-const { NotImplementedError } = require('../extensions/index.js');
+class BinarySearchTree {
+  // ... (остальной код остается неизменным)
 
-// const { ListNode } = require('../extensions/list-node.js');
-
-/**
- * Implement the Queue with a given interface via linked list (use ListNode extension above).
- *
- * @example
- * const queue = new Queue();
- *
- * queue.enqueue(1); // adds the element to the queue
- * queue.enqueue(3); // adds the element to the queue
- * queue.dequeue(); // returns the top element from queue and deletes it, returns 1
- * queue.getUnderlyingList() // returns { value: 3, next: null }
- */
-class Queue {
-
-  getUnderlyingList() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  add(data) {
+    let newNode = new Node(data);
+    if (this.rootNode === null) {
+      this.rootNode = newNode;
+    } else {
+      this.insertNode(this.rootNode, newNode);
+    }
   }
 
-  enqueue(/* value */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  insertNode(node, newNode) {
+    if (newNode.data < node.data) {
+      if (node.left === null) {
+        node.left = newNode;
+      } else {
+        this.insertNode(node.left, newNode);
+      }
+    } else if (newNode.data > node.data) {
+      if (node.right === null) {
+        node.right = newNode;
+      } else {
+        this.insertNode(node.right, newNode);
+      }
+    }
   }
 
-  dequeue() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  remove(data) {
+    this.rootNode = this.removeNode(this.rootNode, data);
   }
+
+  removeNode(node, data) {
+    if (node === null) {
+      return null;
+    } else if (data < node.data) {
+      node.left = this.removeNode(node.left, data);
+    } else if (data > node.data) {
+      node.right = this.removeNode(node.right, data);
+    } else {
+      if (node.left === null && node.right === null) {
+        node = null;
+      } else if (node.left === null) {
+        node = node.right;
+      } else if (node.right === null) {
+        node = node.left;
+      } else {
+        let minRightNode = this.findMinNode(node.right);
+        node.data = minRightNode.data;
+        node.right = this.removeNode(node.right, minRightNode.data);
+      }
+    }
+    return node;
+  }
+
+  // ... (остальной код остается неизменным)
 }
 
 module.exports = {
-  Queue
+  BinarySearchTree
 };
